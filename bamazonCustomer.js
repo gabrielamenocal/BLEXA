@@ -1,7 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
-
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3386,
@@ -71,6 +70,7 @@ function buyProducts(){
       var query = "SELECT * FROM products WHERE ?";
        connection.query(query, {item_id:response.id}, function(err, res){
          console.log(response.id)
+        //  stock = res.[0].stock_quantity
               console.log(
                 "ID: " +  
                 res[0].item_id + 
@@ -82,7 +82,20 @@ function buyProducts(){
                 res[0].department_name + 
                 " || Stock: " +
                 res[0].stock_quantity     
-              )
+              );
+
+          inquirer
+            .prompt({
+              type:"input",
+              message:"How many would you like to buy?",
+              name:"quantity",
+            })
+            .then(function(response, stock){
+              if(response.quantity > stock){
+                console.log("Insufficient quantity!!");
+              }
+
+            })
     });
 })
 }
