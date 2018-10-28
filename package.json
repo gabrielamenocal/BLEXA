@@ -1,7 +1,6 @@
 {
   "name": "blexa",
   "version": "1.0.0",
-  "description": "",
   "main": "bamazonCustomer.js",
   "dependencies": {
     "inquirer": "^6.2.0",
@@ -20,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/gabrielamenocal/BLEXA/issues"
   },
-  "homepage": "https://github.com/gabrielamenocal/BLEXA#readme"
+  "homepage": "https://github.com/gabrielamenocal/BLEXA#readme",
+  "description": ""
 }
