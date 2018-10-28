@@ -26,10 +26,13 @@ function clients() {
     })
     .then(function(response) {
       if (response.menu === "Show-products"){
-        showProducts();   
+        showProducts(); 
+          
       }
       else if (response.menu === "Buy-Product"){        
         buyProducts();
+        console.log("Buy products");
+
       }
       else {
         console.log("Please choose a valida option");
@@ -64,23 +67,22 @@ function buyProducts(){
       message:"Please write the ID of the product you would like to buy",
       name:"id",
     })
-    .then(function(id){
+    .then(function(response){
       var query = "SELECT * FROM products WHERE ?";
-       connection.query(query, {id:id.item_id}, function(err, res){
-        for (var i = 0; i < res.length; i++) {
+       connection.query(query, {item_id:response.id}, function(err, res){
+         console.log(response.id)
               console.log(
                 "ID: " +  
-                res.item_id + 
+                res[0].item_id + 
                 " || Product Name: " +  
-                res.product_name +  
+                res[0].product_name +  
                 " || Price: " +
-                res.price +
-                " || Price: " +
-                res.department_name + 
+                res[0].price +
+                " || Department: " +
+                res[0].department_name + 
                 " || Stock: " +
-                res.stock_quantity     
+                res[0].stock_quantity     
               )
-        }       
     });
 })
 }
