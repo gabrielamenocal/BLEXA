@@ -1,5 +1,8 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var stock;
+var price;
+var id;
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -55,7 +58,8 @@ function showProducts() {
         " || Stock: " +
         res[i].stock_quantity     
       )
-    }    
+    }
+    connection.end();    
   });
 }
 
@@ -70,7 +74,9 @@ function buyProducts(){
       var query = "SELECT * FROM products WHERE ?";
        connection.query(query, {item_id:response.id}, function(err, res){
          console.log(response.id)
-        //  stock = res.[0].stock_quantity
+         stock = res[0].stock_quantity;
+         price = res[0].price;
+         id =  res[0].item_id ;
               console.log(
                 "ID: " +  
                 res[0].item_id + 
@@ -90,9 +96,22 @@ function buyProducts(){
               message:"How many would you like to buy?",
               name:"quantity",
             })
-            .then(function(response, stock){
+            .then(function(response){
               if(response.quantity > stock){
                 console.log("Insufficient quantity!!");
+                connection.end();
+              }
+              else {
+                console.log("In Stock: " + stock);
+                var newQuantity = stock - response.quantity;
+                var charge = price*response.quantity*1.13;
+                var query = `UPDATE products SET stock_quantity = ${newQuantity} WHERE item_id = ${id}`
+                connection.query(query, function(err, res){                  
+                  if (err) throw err;
+                  console.log("Succesfully Charged: " + charge);
+                  connection.end();
+                })
+
               }
 
             })
